@@ -22,11 +22,11 @@ putchar_raw:
     out 0xE9, al
     pop dx
 %endif
-    mov dl, al
+    mov si, ax
     mov ax, 0xB800
     mov es, ax
     call .offset                  ; DI = byte offset of the cursor
-    mov al, dl
+    mov ax, si
     cmp al, 13
     je .do_cr
     cmp al, 10
@@ -85,9 +85,8 @@ putchar_raw:
 ; --- DI = (cur_row * 80 + cur_col) * 2 --------------------------------------
 .offset:
     mov al, [cur_row]
-    xor ah, ah
-    mov bx, 80
-    mul bx
+    mov ah, 80
+    mul ah
     xor ch, ch
     mov cl, [cur_col]
     add ax, cx
