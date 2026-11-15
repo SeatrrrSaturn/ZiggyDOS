@@ -165,10 +165,24 @@ MIT. See `LICENSE`.
 
 ## Bundled .COM programs
 
-The image ships three programs under their real DOS names. They are small
-NASM programs written for ZiggyDOS, not copies of the original Microsoft
-binaries: those are copyrighted, and most of them need file-handle API calls
-this kernel does not implement yet.
+### Four originals from the 1993 Simtel archive
+
+cd.textfiles.com/simtel20 is a mirrored copy of the Simtel MS-DOS Archive
+CD-ROM. These files are shipped byte for byte, untouched:
+
+| File | Size | Path on the CD | What it does |
+|---|---|---|---|
+| EGAMODE.COM | 87 | MSDOS/PCMAG/VOL5N14.ZIP (PC Magazine, 1988) | prints the current video mode |
+| EGAPAGE.COM | 58 | MSDOS/PCMAG/VOL5N14.ZIP | prints the current video page |
+| LOCKOFF.COM | 15 | MSDOS/KEYBOARD/LOCK_OFF.ZIP | clears NumLock / CapsLock / ScrollLock |
+| KBRESET.COM | 33 | MSDOS/KEYBOARD/KBRESET.ZIP | resets the keyboard flags |
+
+They run here because they ask for nothing this kernel lacks: INT 21h
+AH=09h / 4Ch, INT 20h, INT 10h mode calls, and direct writes into the BIOS
+data area at 0040:0017. Most other programs on that CD need file handles,
+TSR hooks or the INT 8 timer, which ZiggyDOS does not provide yet.
+
+### Written for this project
 
 | Name | What it does |
 |---|---|
@@ -178,7 +192,7 @@ this kernel does not implement yet.
 
 CHKDSK.COM is written but not shipped - its FAT scan can spin forever
 depending on where the kernel lands in memory. The source sits in
-programs/experimental/ for anyone who wants to pick it up.
+programs/experimental/.
 
 Known cosmetic issues: DEBUG prints hex bytes without spaces between them,
 and the first characters of a MODE report can repeat. Both come from the

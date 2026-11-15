@@ -147,6 +147,17 @@ run_program:
     mov byte [es:0x80], 0
 
 .load:
+    ; --- blank the FCB area, so a program that peeks at PSP:005D finds
+    ;     no arguments there (real DOS leaves it empty when the tail is empty)
+    push es
+    mov ax, PSP_SEG
+    mov es, ax
+    mov di, 0x005C
+    mov cx, 0x0024
+    xor al, al
+    rep stosb
+    pop es
+
     ; --- load the image at PSP:0100 ---------------------------------------
     mov ax, [rp_cluster]
     mov cx, [prog_size]
