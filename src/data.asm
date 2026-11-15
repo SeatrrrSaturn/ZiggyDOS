@@ -23,33 +23,21 @@ msg_mem2 db "Disk: 1.44MB FAT12, 512 bytes/sector, 1 sector/cluster", 10, 0
 msg_mem3 db "Clusters on volume: ", 0
 
 msg_help db "Available commands:", 10
-         db 10
-         db "  DIR      list the current directory", 10
-         db "  TYPE     display a text file", 10
-         db "  COPY     copy a file", 10
-         db "  DEL      delete a file", 10
-         db "  REN      rename a file", 10
-         db "  MD       create a directory", 10
-         db "  RD       remove an empty directory", 10
-         db "  CD       change directory", 10
-         db "  CLS      clear the screen", 10
-         db "  VER      show the version", 10
-         db "  DATE     show the system date", 10
-         db "  TIME     show the system time", 10
-         db "  ECHO     print text", 10
-         db "  VOL      show the volume label", 10
-         db "  MEM      show memory and disk information", 10
-         db "  PWD      show the current directory", 10
-         db "  TREE     show the directory tree", 10
-         db "  ATTRIB   show or change file attributes", 10
-         db "  MORE     display a file page by page", 10
-         db "  LABEL    show or set the volume label", 10
-         db "  SHUTDOWN power the machine off  (also OFF, HALT)", 10
-         db "  REBOOT   restart the machine  (also RESTART)", 10
-         db "  EXIT     reboot the machine", 10
-         db 10
-         db "Any other name is run as a .COM program from the current", 10
-         db "directory. Type HELLO to see a program that uses INT 21h.", 10, 0
+         db "", 10
+         db "  DIR      list files                     TYPE     display a file", 10
+         db "  COPY     copy a file                    DEL      delete a file", 10
+         db "  REN      rename a file                  MD       make a directory", 10
+         db "  RD       remove a directory             CD       change directory", 10
+         db "  CLS      clear the screen               VER      show the version", 10
+         db "  DATE     show the date                  TIME     show the time", 10
+         db "  ECHO     print text                     VOL      volume label", 10
+         db "  MEM      memory and disk                PWD      current directory", 10
+         db "  TREE     directory tree                 ATTRIB   file attributes", 10
+         db "  MORE     page a file                    LABEL    volume name", 10
+         db "  SHUTDOWN power off                      REBOOT   restart", 10
+         db "  EXIT     reboot                         HELP     this list", 10
+         db "", 10
+         db "Other names run the matching .COM program (try HELLO).", 10, 0
 
 msg_reboot db "Rebooting...", 10, 0
 
