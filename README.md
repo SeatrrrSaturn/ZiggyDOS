@@ -28,6 +28,8 @@ Both images contain the same filesystem: the boot sector, the kernel (in the
 reserved area of the volume), `README.TXT`, `TEST.TXT`, `DOCS\NOTES.TXT`
 and `HELLO.COM`, a demo program that calls `INT 21h`.
 
+Prebuilt images are checked in under `release/` — you can boot them without building anything.
+
 ## Quick start
 
 ```bash

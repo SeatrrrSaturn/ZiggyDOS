@@ -3,3 +3,5 @@ build/
 *.img
 *.iso
 assets/*.COM
+!release/ziggy-dos.iso
+!release/ziggy-dos-144.img
