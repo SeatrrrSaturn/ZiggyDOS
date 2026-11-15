@@ -1,0 +1,6 @@
+Notes
+-----
+
+This file lives in a subdirectory, which means the path resolver had to
+walk the root directory, find DOCS, follow its first cluster, reload the
+directory buffer and then find NOTES.TXT inside it.

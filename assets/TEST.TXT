@@ -1,0 +1,9 @@
+The quick brown fox jumps over the lazy dog.
+0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
+
+This file exists so that TYPE has something longer than one sector to
+read: the kernel walks the FAT12 cluster chain sector by sector and
+prints every byte it finds, exactly like DOS did in 1981.
+
+ZiggyDOS 0.10 - written in 16-bit x86 assembly, assembled with NASM,
+booted by a real BIOS, on a real FAT12 volume.
