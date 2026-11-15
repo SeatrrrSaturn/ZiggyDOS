@@ -14,6 +14,7 @@
     jmp kernel_entry
 
 %include "console.asm"
+%include "scrollback.asm"
 %include "disk.asm"
 %include "rtc.asm"
 %include "fat.asm"

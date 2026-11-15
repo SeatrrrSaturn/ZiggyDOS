@@ -67,6 +67,19 @@ attribute byte of the real directory entry — `ATTRIB +r TEST.TXT` makes the
 file read-only on disk, not just in memory. `LABEL` rewrites root entry 0,
 which is why `DIR` and `VOL` immediately show the new name.
 
+## Scrolling back through history
+
+The VGA text screen holds 25 rows. Text that scrolls off the top is not lost:
+the kernel mirrors every printed row into a 100-row buffer in RAM and treats
+the screen as a window onto it. While the shell is waiting for a command:
+
+* **PgUp** - move the window one row up, into older output
+* **PgDn** - move it one row down; at the bottom you are back on live output
+* any other key, or Enter - snap back to the live view and keep typing
+
+The hardware cursor is hidden while you browse and reappears at the input line
+when you return. `CLS` clears both the screen and the history buffer.
+
 `SHUTDOWN` performs a genuine power-off: it writes `SLP_TYP=5 | SLP_EN` to
 the ACPI PM1a control register (`0x0604`, and `0xB004` on older machines),
 falls back to APM (`INT 15h, AX=5307h`), and only if neither firmware path

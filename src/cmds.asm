@@ -16,6 +16,9 @@ cmd_ver:
 cmd_cls:
     mov ax, 0x0003
     int 0x10
+    mov byte [cur_row], 0
+    mov byte [cur_col], 0
+    call sb_reset
     ret
 
 ; ---------------------------------------------------------------------------

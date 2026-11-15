@@ -22,7 +22,7 @@ putchar_raw:
     out 0xE9, al
     pop dx
 %endif
-    mov si, ax
+    mov si, ax                    ; char in SI: .offset uses MUL, which clobbers DX
     mov ax, 0xB800
     mov es, ax
     call .offset                  ; DI = byte offset of the cursor
@@ -35,11 +35,13 @@ putchar_raw:
     je .do_bs
     mov [es:di], al
     mov byte [es:di+1], 0x07
+    call sb_putc
     inc byte [cur_col]
     cmp byte [cur_col], 80
     jb .done
     mov byte [cur_col], 0
     inc byte [cur_row]
+    call sb_newline
     cmp byte [cur_row], 25
     jb .done
     call scroll_screen
@@ -49,6 +51,7 @@ putchar_raw:
     jmp .done
 .do_lf:
     inc byte [cur_row]
+    call sb_newline
     cmp byte [cur_row], 25
     jb .done
     call scroll_screen
@@ -57,6 +60,8 @@ putchar_raw:
     cmp byte [cur_col], 0
     je .bs_prev
     dec byte [cur_col]
+    mov al, ' '
+    call sb_putc
     jmp .done
 .bs_prev:
     cmp byte [cur_row], 0
@@ -86,7 +91,7 @@ putchar_raw:
 .offset:
     mov al, [cur_row]
     mov ah, 80
-    mul ah
+    mul ah                        ; 8-bit multiply: AX = row*80, DX untouched
     xor ch, ch
     mov cl, [cur_col]
     add ax, cx
@@ -241,7 +246,24 @@ readline:
     cmp al, 8
     je .backspace
     test al, al
-    jz .loop                     ; extended key, ignore
+    jnz .char
+    cmp ah, 0x49                 ; Page Up   - page back through history
+    je .page_up
+    cmp ah, 0x51                 ; Page Down - page forward to live output
+    je .page_down
+    call sb_view_exit
+    jmp .loop
+.page_up:
+    call sb_page_up
+    jmp .loop
+.page_down:
+    call sb_page_down
+    jmp .loop
+.char:
+    cmp byte [sb_view], 0
+    je .accept
+    call sb_view_exit
+.accept:
     cmp al, 32
     jb .loop                     ; other control characters, ignore
     cmp bx, cx
@@ -251,6 +273,7 @@ readline:
     call putchar
     jmp .loop
 .backspace:
+    call sb_view_exit
     test bx, bx
     jz .loop
     dec bx
@@ -264,6 +287,7 @@ readline:
     call putchar_raw
     jmp .loop
 .enter:
+    call sb_view_exit
     mov byte [di], 0
     call newline
     pop es
