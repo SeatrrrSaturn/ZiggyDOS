@@ -234,9 +234,7 @@ readline:
     push cx
     push dx
     push si
-    push es
-    push ds
-    pop es                       ; STOSB writes through ES:DI
+    push es                      ; the caller has set ES:DI to the target buffer
     mov si, di
     xor bx, bx
 .loop:

@@ -8,6 +8,8 @@
 shell:
 .loop:
     call print_prompt
+    push ds
+    pop es
     mov di, cmd_line
     mov cx, 120
     call readline

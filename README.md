@@ -162,3 +162,24 @@ really happened on the FAT12 volume.
 ## License
 
 MIT. See `LICENSE`.
+
+## Bundled .COM programs
+
+The image ships three programs under their real DOS names. They are small
+NASM programs written for ZiggyDOS, not copies of the original Microsoft
+binaries: those are copyrighted, and most of them need file-handle API calls
+this kernel does not implement yet.
+
+| Name | What it does |
+|---|---|
+| DEBUG.COM | D [seg:off] hex dump, E seg:off byte, ? help, Q quit |
+| MODE.COM | reports the current video mode; MODE 80 / MODE CO80 sets text mode 3 |
+| HELLO.COM | the demo program used by the loader tests |
+
+CHKDSK.COM is written but not shipped - its FAT scan can spin forever
+depending on where the kernel lands in memory. The source sits in
+programs/experimental/ for anyone who wants to pick it up.
+
+Known cosmetic issues: DEBUG prints hex bytes without spaces between them,
+and the first characters of a MODE report can repeat. Both come from the
+kernel print path rather than from the programs.

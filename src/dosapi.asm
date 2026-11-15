@@ -21,6 +21,8 @@ install_vectors:
     mov word [es:0x86], KERNEL_SEG
     mov word [es:0x90], int24_handler
     mov word [es:0x92], KERNEL_SEG
+    mov word [es:0x94], int25_handler        ; absolute disk read
+    mov word [es:0x96], KERNEL_SEG
     sti
     pop es
     pop ax
@@ -54,6 +56,41 @@ int20_handler:
 ; ---------------------------------------------------------------------------
 ;  int21_handler
 ; ---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
+;  INT 25h - absolute disk read
+;    in : AL = drive (0 = A:), CX = sector count, DX = first sector,
+;         DS:BX = buffer
+;    out: flags left on the stack, as DOS does (the caller must POPF)
+; ---------------------------------------------------------------------------
+int25_handler:
+    cld
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    push di
+    push ds
+    push es
+    push ds                        ; keep the caller's DS for the way out
+    mov [cs:i25_seg], ds
+    mov ax, KERNEL_SEG
+    mov ds, ax
+    mov es, ax
+    mov ax, dx                     ; LBA
+    mov es, [i25_seg]              ; buffer segment
+    call disk_read                 ; AX = LBA, CX = count, ES:BX = buffer
+    pop ds
+    pop es
+    pop ds
+    pop di
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    retf                           ; flags stay on the stack -> caller POPF
+
 int21_handler:
     cld
     mov [cs:dos_ah], ah
@@ -184,16 +221,22 @@ int21_handler:
     jmp .exit_ax
 .buffered_input:
     push di
+    push es
+    mov ax, [bp+2]                 ; the caller's DS
+    mov es, ax
     mov di, dx
-    mov cl, [di]
+    mov cl, [es:di]                ; max length
     mov ch, 0
     cmp cx, 1
     jae .bi_ok
     mov cx, 1
 .bi_ok:
+    add di, 2                      ; the text starts at buf[2]
+    call readline                  ; fills ES:DI, returns BL = length
+    mov di, dx
     inc di
-    call readline
-    mov [di-1], bl
+    mov [es:di], bl                ; buf[1] = length
+    pop es
     pop di
     xor ax, ax
     jmp .exit_ax
@@ -376,13 +419,16 @@ dos_puts:
     je .done
     test al, al
     jz .done
+    push si
     call putchar
+    pop si
     jmp .loop
 .done:
     pop si
     ret
 
 ; ---------------------------------------------------------------------------
+i25_seg       dw 0
 dos_ah        db 0
 dos_al        db 0
 dos_result    dw 0
