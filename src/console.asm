@@ -65,6 +65,14 @@ putchar_raw:
     mov byte [cur_col], 79
 .done:
     call update_cursor
+%ifdef DEBUG
+    ; headless QEMU only refreshes its VGA surface when the BIOS touches it
+    mov ah, 0x02
+    mov bh, 0
+    mov dh, [cur_row]
+    mov dl, [cur_col]
+    int 0x10
+%endif
     pop es
     pop di
     pop si

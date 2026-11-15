@@ -46,6 +46,7 @@ rm -rf "$BUILD/iso_root"
 mkdir -p "$BUILD/iso_root"
 cp "$BUILD/ziggy-dos-144.img" "$BUILD/iso_root/"
 cp assets/README.TXT "$BUILD/iso_root/README.TXT"
+cp README.md "$BUILD/iso_root/README.md"
 [ -f LICENSE ] && cp LICENSE "$BUILD/iso_root/LICENSE.TXT"
 xorriso -as mkisofs \
     -V ZIGGYDOS -A "ZiggyDOS bootable ISO" -p "ZiggyDOS Project" \
