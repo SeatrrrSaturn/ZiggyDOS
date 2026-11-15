@@ -22,6 +22,7 @@
 %include "exec.asm"
 %include "shell.asm"
 %include "cmds.asm"
+%include "cmds2.asm"
 %include "data.asm"
 
 ; ---------------------------------------------------------------------------

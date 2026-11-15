@@ -36,8 +36,12 @@ cmd_echo:
 ;  cmd_vol
 ; ---------------------------------------------------------------------------
 cmd_vol:
-    mov si, msg_vol_line
+    call cache_volume
+    mov si, msg_vol_prefix
     call puts
+    mov si, vol_label
+    call puts
+    call newline
     ret
 
 ; ---------------------------------------------------------------------------
@@ -126,6 +130,7 @@ cmd_exit:
 ;  cmd_dir
 ; ---------------------------------------------------------------------------
 cmd_dir:
+    call cache_volume
     call skip_spaces
     cmp byte [si], 0
     je .current
@@ -160,8 +165,11 @@ cmd_dir:
     mov ax, [cur_dir_cluster]
     call load_dir
 .list:
-    mov si, msg_vol_line
+    mov si, msg_vol_prefix
     call puts
+    mov si, vol_label
+    call puts
+    call newline
     mov si, msg_dir_of
     call puts
     mov si, cur_dir_path

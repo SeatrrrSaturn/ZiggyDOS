@@ -13,7 +13,8 @@ msg_version db "ZiggyDOS version 0.10", 10
             db "Kernel: 16-bit real mode, built from source with NASM", 10
             db "DOS API: INT 21h / INT 20h compatible subset", 10, 0
 
-msg_vol_line db " Volume in drive A is ZIGGYDOS", 10, 0
+msg_vol_line db " Volume in drive A is ", 0
+msg_vol_prefix db " Volume in drive A is ", 0
 msg_date_prefix db "Current date is ", 0
 msg_time_prefix db "Current time is ", 0
 
@@ -38,6 +39,13 @@ msg_help db "Available commands:", 10
          db "  ECHO     print text", 10
          db "  VOL      show the volume label", 10
          db "  MEM      show memory and disk information", 10
+         db "  PWD      show the current directory", 10
+         db "  TREE     show the directory tree", 10
+         db "  ATTRIB   show or change file attributes", 10
+         db "  MORE     display a file page by page", 10
+         db "  LABEL    show or set the volume label", 10
+         db "  SHUTDOWN power the machine off  (also OFF, HALT)", 10
+         db "  REBOOT   restart the machine  (also RESTART)", 10
          db "  EXIT     reboot the machine", 10
          db 10
          db "Any other name is run as a .COM program from the current", 10

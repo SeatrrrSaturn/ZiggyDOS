@@ -208,6 +208,16 @@ cmd_table:
     dw t_help,  cmd_help
     dw t_exit,  cmd_exit
     dw t_vol,   cmd_vol
+    dw t_pwd,    cmd_pwd
+    dw t_tree,   cmd_tree
+    dw t_attrib, cmd_attrib
+    dw t_more,   cmd_more
+    dw t_label,  cmd_label
+    dw t_shut,   cmd_shutdown
+    dw t_off,    cmd_shutdown
+    dw t_halt,   cmd_shutdown
+    dw t_reboot, cmd_reboot
+    dw t_restart, cmd_reboot
     dw t_echo2, cmd_echo
     dw 0
 
@@ -229,3 +239,13 @@ t_mem   db "MEM", 0
 t_help  db "HELP", 0
 t_exit  db "EXIT", 0
 t_vol   db "VOL", 0
+t_pwd   db "PWD", 0
+t_tree  db "TREE", 0
+t_attrib db "ATTRIB", 0
+t_more  db "MORE", 0
+t_label db "LABEL", 0
+t_shut  db "SHUTDOWN", 0
+t_off   db "OFF", 0
+t_halt  db "HALT", 0
+t_reboot db "REBOOT", 0
+t_restart db "RESTART", 0

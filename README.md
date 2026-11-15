@@ -28,8 +28,6 @@ Both images contain the same filesystem: the boot sector, the kernel (in the
 reserved area of the volume), `README.TXT`, `TEST.TXT`, `DOCS\NOTES.TXT`
 and `HELLO.COM`, a demo program that calls `INT 21h`.
 
-Prebuilt images are checked in under `release/` — you can boot them without building anything.
-
 ## Quick start
 
 ```bash
@@ -57,8 +55,23 @@ CLS      clear the screen                    VER      show the version
 DATE     show the date from the CMOS clock   TIME     show the time
 ECHO     print text                          VOL      volume label
 MEM      memory and disk information         HELP     command list
+PWD      show the current directory          TREE     show the directory tree
+ATTRIB   show or change file attributes      MORE     page through a file
+LABEL    show or set the volume label
+SHUTDOWN power the machine off (OFF, HALT)   REBOOT   restart (RESTART)
 EXIT     reboot the machine
 ```
+
+`ATTRIB` accepts `+r/-r`, `+h/-h`, `+s/-s` and `+a/-a` and writes the
+attribute byte of the real directory entry — `ATTRIB +r TEST.TXT` makes the
+file read-only on disk, not just in memory. `LABEL` rewrites root entry 0,
+which is why `DIR` and `VOL` immediately show the new name.
+
+`SHUTDOWN` performs a genuine power-off: it writes `SLP_TYP=5 | SLP_EN` to
+the ACPI PM1a control register (`0x0604`, and `0xB004` on older machines),
+falls back to APM (`INT 15h, AX=5307h`), and only if neither firmware path
+answers does it stop at `HLT`. `REBOOT` jumps through the BIOS reset vector
+`FFFF:0000` after setting the warm-boot flag at `0040:0072`.
 
 Anything else is treated as a program name: `HELLO` loads `HELLO.COM`,
 builds a 256-byte PSP, places the image at `PSP:0100` and jumps to it. The
@@ -128,6 +141,7 @@ are not implemented yet.
 The build is tested in QEMU with both the floppy image and the ISO. The
 session used for the screenshots below exercised `DIR`, `TYPE` (root and
 subdirectory), `COPY`, `REN`, `DEL`, `MD`, `CD`, `RD`, `VER`, `MEM`, `DATE`,
+`TIME`, `PWD`, `TREE`, `ATTRIB`, `MORE`, `LABEL`,
 `TIME` and `HELLO`. After running `COPY TEST.TXT ZZ.TXT` inside ZiggyDOS and
 shutting the machine down, `mdir` on the host listed `ZZ.TXT` — the write
 really happened on the FAT12 volume.
